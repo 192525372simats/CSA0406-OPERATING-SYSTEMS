@@ -1,0 +1,8 @@
+#include <stdio.h>
+#include <unstid.h>
+int main()
+{
+if(fork()==0) printf("Child 1: %d\n",getpid());
+else if(fork()==0) print("child 2: %d\n",getpid());
+return 0;
+}
