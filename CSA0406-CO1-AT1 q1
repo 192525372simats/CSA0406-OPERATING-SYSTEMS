@@ -1,5 +1,5 @@
 C.CHAITHANYA PRIYA (192525372)
-
+QUESTION 1
 (a) Type of Operating System
    Multi-user Operating System
    Justification: Allows multiple users to execute programs simultaneously on the same Linux server.
@@ -14,3 +14,69 @@ IF pid == fork()
 Else
    print "Parent PID = ",getpid()
 stop
+
+QUESTION 2
+(a) Required System Calls
+        creat()
+        write()
+        read()
+    close()
+(b) Purpose of Any Two
+       creat() – Creates a new file.
+       write() – Writes data to a file.
+(c) Short Pseudo-code
+START
+fd = creat("student.txt")
+write(fd, "Rahul")
+close(fd)
+STOP
+
+QUESTION 3
+(a) Required System Calls
+     open()
+    read()
+    write()
+    close()
+(b) Purpose of Any Two
+    read() – Reads data from a file.
+    write() – Writes data to a file.
+(c) Short Pseudo-code
+START
+fd1 = open("source.txt")
+fd2 = creat("dest.txt")
+
+WHILE read(fd1, data) > 0
+    write(fd2, data)
+END WHILE
+
+close(fd1)
+close(fd2)
+STOP
+QUESTION 4 
+(a) Purpose
+     fork() – Creates a child process.
+     exec() – Replaces the current process with a new program.
+(b) Role of wait()
+     Waits for the child process to finish before the parent continues.
+(c) Short Pseudo-code
+START
+pid = fork()
+IF pid == 0
+    exec("program")
+ELSE
+    wait()
+END IF
+STOP
+QUESTION 5
+(a) Importance of File Management
+    Organizes and stores files efficiently.
+   Provides secure access and retrieval of data.
+(b) Purpose of System Calls
+    open() – Opens an existing file for reading or writing.
+    close() – Closes the file and releases system resources.
+(c) Short Pseudo-code
+START
+fd = open("file.txt")
+read(fd, data)
+close(fd)
+STOP
