@@ -1,0 +1,10 @@
+START
+fd  creat("student.txt")
+IF fd ≥ 0 THEN
+    write(fd, "Student Name: John")
+    close(fd)
+    print "Record Stored"
+ELSE
+    print "Error Creating File"
+END IF
+STOP
