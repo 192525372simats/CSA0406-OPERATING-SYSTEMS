@@ -1,0 +1,5 @@
+START
+fd = open("file.txt", O_RDONLY)
+read(fd, buffer, sizeof(buffer))
+close(fd)
+STOP
