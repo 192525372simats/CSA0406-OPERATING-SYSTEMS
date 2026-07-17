@@ -1,0 +1,7 @@
+start 
+pid = fork()
+IF pid == fork()
+   print "Child PID = ",getpid()
+Else
+   print "Parent PID = ",getpid()
+stop
