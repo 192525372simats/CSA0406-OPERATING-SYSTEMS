@@ -1,3 +1,12 @@
+C.CHAITHANYA PRIYA (192525372)
+
+(a) Type of Operating System
+   Multi-user Operating System
+   Justification: Allows multiple users to execute programs simultaneously on the same Linux server.
+(b) Any Two Kernel Responsibilities
+           Process scheduling
+           Memory management
+ C)Short Pseudo-code
 start 
 pid = fork()
 IF pid == fork()
