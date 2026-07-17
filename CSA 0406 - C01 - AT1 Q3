@@ -1,0 +1,10 @@
+START
+fd1 = open("source.txt", O_RDONLY)
+fd2 = creat("destination.txt", 0644)
+while ((n = read(fd1, buffer, sizeof(buffer))) > 0)
+{
+    write(fd2, buffer, n)
+}
+close(fd1)
+close(fd2)
+STOP
