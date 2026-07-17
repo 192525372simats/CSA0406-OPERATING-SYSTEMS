@@ -1,0 +1,11 @@
+START
+pid = fork()
+if (pid == 0)
+{
+    exec("program")
+}
+else
+{
+    wait()
+}
+STOP
