@@ -1,0 +1,43 @@
+C.CHAITHANYA PRIYA (192525372)
+             QUESTION 1
+Deadlock condition:
+    P1 locks R1 and waits for R2.
+    P2 locks R2 and waits for R1.
+    Both wait for each other, so a deadlock occurs.
+Optimization:
+Make both processes lock resources in the same order (e.g., R1 first, then R2).
+This prevents deadlock.
+  
+            QUESTION 2
+Cause:
+     Processes are frequently waiting for I/O (disk, keyboard, network, etc.).
+     So, the CPU remains idle even though processes are ready.
+System-level optimization:
+        Reduce I/O waiting time using faster I/O devices or I/O buffering.
+        This keeps the CPU busy and improves CPU utilization.
+  
+            QUESTION 3
+Memory issue:
+        The program has 25 threads, so many memory pages are used.
+        This causes frequent page faults, which slows down performance.
+Two optimizations:
+         Reduce the number of threads to use less memory.
+         Optimize heap memory usage by freeing unused memory and avoiding unnecessary allocations.
+  
+               QUESTION 4
+  Root cause:
+           P5 is in the lowest priority queue (Q3).
+            Higher-priority queues (Q1 and Q2) keep getting CPU time.
+            So, P5 never gets a chance to execute, causing starvation.
+Optimization:
+        Use Aging (increase the priority of processes waiting for a long time).
+        This ensures P5 eventually gets CPU time and improves fairness.
+  
+                 QUESTION 5
+  Reason:
+             The time quantum is very small (1 ms), so the CPU switches processes very often.
+             High I/O wait also causes frequent context switches.
+             This creates high overhead and reduces performance.
+   Two optimizations:
+        Increase the time quantum (e.g., from 1 ms to 5 ms) to reduce context switches.
+        Reduce I/O waiting using faster I/O devices or I/O buffering to improve CPU efficiency.
