@@ -517,5 +517,95 @@ Seek Sequence:
 53 -> 98 -> 183 -> 37 -> 122 -> 14
 Total Head Movement = 331 cylinders
 Average Head Movement = 66.20 cylinders
-
+                                            exercise 38
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+int a[20], n, head, i, j, temp, total = 0;
+printf("Enter number of requests: ");
+scanf("%d", &n);
+printf("Enter requests: ");
+for(i = 0; i < n; i++)
+scanf("%d", &a[i]);
+printf("Enter head position: ");
+scanf("%d", &head);
+for(i = 0; i < n - 1; i++)
+for(j = 0; j < n - i - 1; j++)
+if(a[j] > a[j + 1]) {
+temp = a[j];
+a[j] = a[j + 1];
+a[j + 1] = temp;
+}
+for(i = 0; i < n; i++) {
+total += abs(head - a[i]);
+head = a[i];
+}
+printf("Total head movement = %d", total);
+return 0;
+}
+output:
+Enter number of requests: 5
+Enter requests: 98 183 37 122 14
+Enter head position: 53
+Total head movement = 207
+                                    exercise 39
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+int a[20], n, head, i, j, temp, total = 0;
+printf("Enter number of requests: ");
+scanf("%d", &n);
+printf("Enter requests: ");
+for(i = 0; i < n; i++)
+scanf("%d", &a[i]);
+printf("Enter head position: ");
+scanf("%d", &head);
+for(i = 0; i < n - 1; i++)
+for(j = 0; j < n - i - 1; j++)
+if(a[j] > a[j + 1]) {
+temp = a[j];
+a[j] = a[j + 1];
+a[j + 1] = temp;
+}
+for(i = 0; i < n; i++) {
+total += abs(head - a[i]);
+head = a[i];
+}
+printf("Total head movement = %d", total);
+return 0;
+}
+output:
+Enter number of requests: 5
+Enter requests: 98 183 37 122 14
+Enter head position: 53
+Total head movement = 207
+                                     exercise 40
+#include <stdio.h>
+int main() {
+int owner, group, others;
+printf("Enter owner group others permissions: ");
+scanf("%d%d%d", &owner, &group, &others);
+printf("chmod %d%d%d filename",
+owner, group, others);
+return 0;
+}
+output:
+Enter owner group others permissions: 7 5 4
+chmod 754 filename
+                                        exercise 26
+#include <stdio.h>
+int main() {
+FILE *fp;
+char data[50];
+fp = fopen("file.txt", "w");
+printf("Enter data: ");
+scanf("%s", data);
+fprintf(fp, "%s", data);
+fclose(fp);
+printf("File created and data written successfully");
+return 0;
+}
+output:
+Enter data: Hello
+File created and data written successfully
 
