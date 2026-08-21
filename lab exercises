@@ -608,4 +608,461 @@ return 0;
 output:
 Enter data: Hello
 File created and data written successfully
+                                           exercise 12
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#define N 5
+pthread_mutex_t fork[N];
+void *philosopher(void *num)
+{
+int id = *(int *)num;
+printf("Philosopher %d is thinking\n", id);
+pthread_mutex_lock(&fork[id]);
+printf("Philosopher %d picked up left fork\n", id);
+pthread_mutex_lock(&fork[(id + 1) % N]);
+printf("Philosopher %d picked up right fork\n", id);
+printf("Philosopher %d is eating\n", id);
+sleep(1);
+pthread_mutex_unlock(&fork[id]);
+pthread_mutex_unlock(&fork[(id + 1) % N]);
+printf("Philosopher %d finished eating\n", id);
+return NULL;
+}
+int main()
+{
+pthread_t p[N];
+int id[N];
+for (int i = 0; i < N; i++)
+pthread_mutex_init(&fork[i], NULL);
+for (int i = 0; i < N; i++) {
+id[i] = i + 1;
+pthread_create(&p[i], NULL, philosopher, &id[i]);
+}
+for (int i = 0; i < N; i++)
+pthread_join(p[i], NULL);
+return 0;
+}
+output:
+Philosopher 1 is thinking
+Philosopher 1 picked up left fork
+Philosopher 1 picked up right fork
+Philosopher 1 is eating
+Philosopher 2 is thinking
+Philosopher 1 finished eating
+Philosopher 2 picked up left fork
+Philosopher 2 picked up right fork
+Philosopher 2 is eating
+Philosopher 2 finished eating
+                                            exercise 14
+#include <stdio.h>
+#include <string.h>
+int main() {
+char file[10][20], name[20];
+int n = 0, choice, i;
+do {
+printf("\n1.Create 2.Display 3.Exit\n");
+scanf("%d", &choice);
+switch(choice) {
+case 1:
+printf("Enter file name: ");
+scanf("%s", file[n]);
+n++;
+break;
+case 2:
+printf("Files in directory:\n");
+for(i = 0; i < n; i++
+printf("%s\n", file[i]);
+break;
+}
+} while(choice != 3);
+return 0;
+}
+output:
+1.Create 2.Display 3.Exit
+Enter file name: file1.txt
+1.Create 2.Display 3.Exit
+1
+Enter file name: file2.txt
+1.Create 2.Display 3.Exit
+2
+Files in directory:
+file1.txt
+file2.txt
+                                         exercise 15
+#include <stdio.h>
+int main() {
+int users, files, i, j;
+char user[10][20];
+char file[10][10][20];
+printf("Enter number of users: ");
+scanf("%d", &users);
+for(i = 0; i < users; i++) {
+printf("\nEnter user name: ");
+scanf("%s", user[i]);
+printf("Enter number of files: ");
+scanf("%d", &files);
+for(j = 0; j < files; j++) {
+printf("Enter file name: ");
+scanf("%s", file[i][j]);
+}
+printf("\nUser: %s\nFiles:\n", user[i]);
+for(j = 0; j < files; j++)
+printf("%s\n", file[i][j]);
+}
+return 0;
+}
+output:
+Enter number of users: 2
+Enter user name: User1
+Enter number of files: 2
+Enter file name: file1.txt
+Enter file name: file2.txt
+User: User1
+Files:
+file1.txt
+file2.txt
+Enter user name: User2
+Enter number of files: 1
+Enter file name: data.txt
+User: User2
+Files:
+data.txt
+                                              exercise 16
+#include <stdio.h>
+#include <stdlib.h>
+struct Employee {
+int id;
+char name[20];
+float salary;
+};
+int main() {
+FILE *fp;
+struct Employee e;
+int n, i, pos;
+fp = fopen("employee.dat", "wb");
+printf("Enter number of employees: ");
+scanf("%d", &n);
+for(i = 0; i < n; i++) {
+printf("\nEnter ID: ");
+scanf("%d", &e.id);
+printf("Enter Name: ");
+scanf("%s", e.name);
+printf("Enter Salary: ");
+scanf("%f", &e.salary);
+fwrite(&e, sizeof(e), 1, fp);
+}
+fclose(fp);
+fp = fopen("employee.dat", "rb");
+printf("\nEnter employee record number to access (1-%d): ", n);
+scanf("%d", &pos);
+fseek(fp, (pos - 1) * sizeof(e), SEEK_SET);
+fread(&e, sizeof(e), 1, fp);
+printf("\nEmployee Details\n");
+printf("ID: %d\n", e.id);
+printf("Name: %s\n", e.name);
+printf("Salary: %.2f\n", e.salary);
+fclose(fp);
+return 0;
+}
+output:
+Enter number of employees: 2
+Enter ID: 101
+Enter Name: Ram
+Enter Salary: 25000
+Enter ID: 102
+Enter Name: Ravi
+Enter Salary: 30000
+Enter employee record number to access (1-2): 2
+Employee Details
+ID: 102
+Name: Ravi
+Salary: 30000.00
+                                                 exercise 24
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+int main() {
+int fd;
+char buffer[100];
+fd = open("test.txt", O_CREAT | O_RDWR, 0644);
+write(fd, "Hello UNIX System Calls", 23);
+close(fd);
+fd = open("test.txt", O_RDONLY);
+read(fd, buffer, 100);
+printf("File Content: %s\n", buffer);
+close(fd);
+return 0;
+}
+output:
+File Content: Hello UNIX System Calls
+                                  exercise 25
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+int main() {
+int fd;
+struct stat st;
+DIR *dir;
+struct dirent *entry;
+fd = open("test.txt", O_RDONLY);
+// fcntl()
+printf("File descriptor flags: %d\n", fcntl(fd, F_GETFL));
+// lseek()
+printf("File size using lseek: %ld bytes\n",
+lseek(fd, 0, SEEK_END));
+// stat()
+stat("test.txt", &st);
+printf("File size using stat: %ld bytes\n", st.st_size);
+close(fd);
+// opendir() and readdir()
+dir = opendir(".");
+printf("\nFiles in current directory:\n"
+while ((entry = readdir(dir)) != NULL) {
+printf("%s\n", entry->d_name);
+}
+closedir(dir);
+return 0;
+}
+output:
+File descriptor flags: 0
+File size using lseek: 23 bytes
+File size using stat: 23 bytes
+Files in current directory:
+..
+test.txt
+program.c
+a.out
+                                         exercise 27
+#include <stdio.h>
+#include <dirent.h>
+int main() {
+DIR *dir;
+struct dirent *entry;
+dir = opendir(".");
+printf("Files in current directory:\n");
+while ((entry = readdir(dir)) != NULL)
+printf("%s\n", entry->d_name);
+closedir(dir);
+return 0;
+}
+output:
+Files in current directory:
+.
+..
+test.c
+program.c
+a.out
+                                                exercise 28
+#include <stdio.h>
+#include <string.h>
+int main() {
+FILE *fp;
+char line[100], word[20];
+fp = fopen("test.txt", "r");
+printf("Enter word to search: ");
+scanf("%s", word);
+while (fgets(line, sizeof(line), fp) != NULL) {
+if (strstr(line, word) != NULL)
+printf("%s", line);
+}
+fclose(fp);
+return 0;
+}
+output:
+Enter word to search: UNIX
+UNIX Operating System#include <stdio.h>
+
+                                                exercise 29
+#include <stdio.h>
+#include <pthread.h>
+int buffer = 0;
+pthread_mutex_t lock;
+void *producer(void *arg) {
+pthread_mutex_lock(&lock);
+buffer++;
+printf("Producer produced item: %d\n", buffer);
+pthread_mutex_unlock(&lock);
+return NULL;
+}
+void *consumer(void *arg) {
+pthread_mutex_lock(&lock);
+printf("Consumer consumed item: %d\n", buffer);
+buffer--;
+pthread_mutex_unlock(&lock);
+return NULL;
+}
+int main() {
+pthread_t p1, p2;
+pthread_mutex_init(&lock, NULL);
+pthread_create(&p1, NULL, producer, NULL);
+pthread_create(&p2, NULL, consumer, NULL);
+pthread_join(p1, NULL);
+pthread_join(p2, NULL);
+pthread_mutex_destroy(&lock);
+return 0;
+}
+output:
+Producer produced item: 1
+Consumer consumed item: 1
+                                                exercise 30
+#include <stdio.h>
+#include <pthread.h>
+void *display(void *arg) {
+printf("Thread is running\n");
+pthread_exit(NULL);
+}
+int main() {
+pthread_t t1, t2;
+// Create
+pthread_create(&t1, NULL, display, NULL);
+pthread_create(&t2, NULL, display, NULL);
+// Equal
+if (pthread_equal(t1, t2))
+printf("Threads are equal\n");
+else
+printf("Threads are not equal\n");
+// Join
+pthread_join(t1, NULL);
+pthread_join(t2, NULL);
+printf("Threads completed\n");
+return 0;
+}
+output:
+Threads are not equal
+Thread is running
+Thread is running
+Threads completed
+                                                  exercise 31
+#include <stdio.h>
+int main() {
+int pages[20], frame[10];
+int n, f, i, j, k = 0, fault = 0, found;
+printf("Enter number of pages: ");
+scanf("%d", &n);
+printf("Enter reference string: ");
+for (i = 0; i < n; i++)
+scanf("%d", &pages[i]);
+printf("Enter number of frames: ");
+scanf("%d", &f);
+for (i = 0; i < f; i++)
+frame[i] = -1;
+for (i = 0; i < n; i++) {
+found = 0;
+for (j = 0; j < f; j++) {
+if (frame[j] == pages[i])
+found = 1;
+}
+if (!found) {
+frame[k] = pages[i];
+k = (k + 1) % f;
+fault++;
+}
+for (j = 0; j < f; j++)
+printf("%d ", frame[j]);
+printf("\n");
+}
+printf("Total Page Faults = %d\n", fault);
+return 0;
+}
+output:
+Enter number of pages: 7
+Enter reference string: 1 2 3 4 1 2 5
+Enter number of frames: 3
+1 -1 -1
+1 2 -1
+1 2 3
+4 2 3
+4 1 3
+4 1 2
+5 1 2
+Total Page Faults = 7
+                                       exercise 32
+#include <stdio.h>
+int main() {
+int pages[20], frame[10], time[10];
+int n, f, i, j, fault = 0, count = 0;
+int found, pos, min;
+printf("Enter number of pages: ");
+scanf("%d", &n);
+printf("Enter reference string: ");
+for (i = 0; i < n; i++)
+scanf("%d", &pages[i]);
+printf("Enter number of frames: ");
+scanf("%d", &f);
+for (i = 0; i < f; i++)
+frame[i] = -1;
+for (i = 0; i < n; i++) {
+found = 0;
+for (j = 0; j < f; j++) {
+if (frame[j] == pages[i]) {
+found = 1;
+time[j] = ++count;
+}
+}
+if (!found) {
+min = 0;
+for (j = 1; j < f; j++)
+if (time[j] < time[min])
+min = j;
+frame[min] = pages[i];
+time[min] = ++count;
+fault++;
+}
+}
+printf("Total Page Faults = %d\n", fault);
+return 0;
+}
+output:
+Enter number of pages: 7
+Enter reference string: 1 2 3 4 1 2 5
+Enter number of frames: 3
+Total Page Faults = 7
+                                                                      exercise 33
+#include <stdio.h>
+int main() {
+int pages[20], frame[10];
+int n, f, i, j, k, fault = 0;
+int found, pos, farthest;
+printf("Enter number of pages: ");
+scanf("%d", &n);
+printf("Enter reference string: ");
+for (i = 0; i < n; i++)
+scanf("%d", &pages[i]);
+printf("Enter number of frames: ");
+scanf("%d", &f);
+for (i = 0; i < f; i++)
+frame[i] = -1;
+for (i = 0; i < n; i++) {
+found = 0;
+for (j = 0; j < f; j++)
+if (frame[j] == pages[i])          
+found = 1;
+if (!found) {
+if (i < f) {
+frame[i] = pages[i];
+} else {
+farthest = -1;
+pos = -1;
+for (j = 0; j < f; j++) {
+for (k = i + 1; k < n; k++)
+if (frame[j] == pages[k])
+break;
+if (k > farthest) {
+farthest = k
+pos = j;}}
+frame[pos] = pages[i];}
+fault++;}}
+printf("Total Page Faults = %d\n", fault);
+return 0;
+}
+output:
+Enter number of pages: 7
+Enter reference string: 1 2 3 4 1 2 5
+Enter number of frames: 3
+Total Page Faults = 5
+
 
