@@ -1,0 +1,228 @@
+C.CHAITHANYA PRIYA (192525372)
+                                  QUESTION 1 ANS
+Design of an Optimized Linux File System Layout
+Aim:
+To design an efficient Linux file system layout for a 50 GB server that manages system logs, user files, and application data while preventing disk space exhaustion
+Problem Analysis:
+System log files can grow rapidly.
+Users need space for their files.
+Applications require storage for data.
+If the root partition becomes full, critical services may stop working.
+Therefore, separate partitions or logical volumes should be used so that excessive log growth does not affect the entire system.
+Proposed Storage Layout:
+/boot` – 1 GB: Stores boot files and the Linux kernel.
+`/` – 8 GB: Stores the operating system and important system files.
+`/var/log` – 10 GB: Stores system and application log files. This ensures logs do not exceed 10 GB.
+`/home` – 12 GB: Stores user files and personal data.
+`/opt` – 14 GB: Stores application software and application data.
+`swap` – 2 GB: Used as virtual memory when RAM is full.
+Free Space – 3 GB: Reserved for future storage expansion.
+Total Storage = 50 GB
+Total = 50 GB
+Partitioning Technique
+Use LVM (Logical Volume Manager).
+Advantages:
+Partition sizes can be increased later.
+Free space can be allocated when needed.
+Storage management becomes flexible.
+Reduces the risk of complete disk failure due to one directory growing too much.
+Log Management:
+The /var/log partition is limited to 10 GB.
+Use logrotate to automatically manage old log files.
+Example configuration:
+/var/log/*.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+}
+This configuration:
+Rotates logs every week.
+Keeps only 4 old log files.
+Compresses old logs.
+Removes unnecessary empty logs.
+Thus, log files are controlled and do not continuously consume disk space.
+Disk Space Monitoring:
+The following command can be used to check disk usage:
+df -h
+To check the size of log files:
+du -sh /var/log/*
+Administrators can regularly monitor disk usage and take action before partitions become full.
+ Benefits of the Design:
+Log files cannot consume more than the allocated 10 GB partition.
+User files are separated in /home.
+Application data is separated in /opt.
+The operating system remains protected in the root / partition.
+LVM allows future storage expansion.
+Log rotation automatically removes or compresses old logs.
+Critical services can continue running even if one storage area becomes full.
+Result:
+An optimized Linux file system layout was designed for a 50 GB server using separate partitions and LVM. The /var/log partition is restricted to 10 GB, and logrotate is used to manage log growth. This design improves disk utilization, prevents disk space exhaustion, and helps critical services continue operating without interruption.
+
+                                                Question 2 ANS
+Linux Kernel Optimization for High CPU Workloads
+Aim:
+To improve the performance of a Linux system with high CPU usage and frequent context switching.
+Problem:
+The system has:
+* High CPU workload
+* Frequent context switching
+* Delays in processing
+* Need for real-time performance
+Hardware cannot be upgraded, so kernel-level optimization is required.
+Solution:
+ 1. Scheduler Tuning
+Give higher priority to important processes.
+bash
+sudo chrt -f 50 ./program
+This helps critical processes get CPU time faster.
+2. CPU Affinity
+Run a process on a specific CPU core.
+bash
+taskset -c 0 ./program
+This can reduce unnecessary context switching.
+3. Reduce Unnecessary Processes
+Stop unwanted background services and applications to reduce CPU load.
+4. Kernel Modules
+Check loaded modules:
+bash
+lsmod
+Load a required module:
+bash
+sudo modprobe module_name
+Remove an unnecessary module:
+bash
+sudo rmmod module_name
+5. Real-Time Support
+Use real-time scheduling or a **PREEMPT_RT kernel** for important tasks. This reduces delay and improves response time.
+Monitoring:
+Check CPU and system performance:
+bash
+toP
+bash
+vmstat 1
+Result:
+By tuning the scheduler, setting CPU affinity, reducing unnecessary processes, and managing kernel modules, the Linux system can reduce context-switching delays and improve real-time performance.
+
+                                            QUESTION 3 ANS
+Efficient Shell Script for Processing 1 Million Log Entries
+Aim:
+To process **1 million log entries per day** using shell scripting and optimized Linux commands within **2 minutes**.
+Problem Analysis:
+Processing a large number of log entries using slow shell loops can take a long time.
+For example, this is slow:
+bash
+while read line
+do
+    echo "$line"
+done < logfile.txt
+Instead, optimized Linux commands such as `awk`, `grep`, and `sort` should be used.
+Solution:
+Use the following shell script:
+bash
+!/bin/bash
+LOGFILE="server.log"
+OUTPUT="report.txt"
+grep "ERROR" "$LOGFILE" | awk '{print $1, $2, $NF}' | sort | uniq -c > "$OUTPUT"
+echo "Log processing completed."
+Commands Used:
+1. `grep`
+bash
+grep "ERROR" server.log
+Filters only error-related log entries quickly.
+2. `awk`
+bash
+awk '{print $1, $2, $NF}'
+Extracts only the required fields from the log file.
+3. `sort`
+bash
+sort
+Organizes the filtered data.
+4. `uniq -c`
+bash
+uniq -c
+Counts repeated entries.
+Performance Optimization:
+* Avoids slow `while` loops.
+* Uses fast built-in Linux utilities.
+* Processes data using pipelines.
+* Reads the log file only once.
+* Uses `LC_ALL=C` for faster sorting.
+Optimized command:
+bash
+LC_ALL=C grep "ERROR" server.log | awk '{print $1, $2, $NF}' | sort | uniq -c > report.txt
+Result:
+The shell script efficiently processes **1 million log entries** using `grep`, `awk`, `sort`, and `uniq`. By avoiding unnecessary loops and using optimized Linux commands, the script can achieve high performance and can be designed to complete the task within the required **2-minute limit**, depending on the system and log size.
+
+                                                QUESTION  ANS
+Process Management Strategy for High CPU Usage
+Aim:
+To identify and control a faulty process consuming **90% CPU** without restarting the Linux system and without affecting critical services.
+1. Identify the Faulty Process
+Use:
+bash id="kx3lqz"
+top
+or:
+bash id="1p5g3j"
+ps aux --sort=-%cpu | head
+These commands show the processes using the highest CPU.
+2. Monitor the Process
+Suppose the faulty process ID is **1234**.
+Use:
+bash id="wgx10mg"
+top -p 1234
+This monitors only that process.
+3. Reduce Process Priority
+Before stopping the process, reduce its CPU priority:
+bash id="e08mj8"
+renice 19 -p 1234
+This gives higher priority to other important processes.
+4. Stop the Faulty Process Safely
+First, send a normal termination signal:
+bash id="vutkyo"
+kill 1234
+Wait and check whether the process has stopped.
+If it does not stop, use:
+bash id="4lq1iv"
+kill -9 1234
+5. Verify Critical Services
+Check running services:
+bash id="3d8drd"
+systemctl status service_name
+Check overall CPU usage again:
+bash id="cj5qiu"
+top
+Result:
+The faulty process is identified using `top` or `ps`, monitored using `top -p`, and controlled using `renice` and `kill`. This reduces CPU usage without restarting the system and helps ensure that critical services continue running.
+                                             QUESTION 5 ANS
+Virtual Machine Resource Allocation Strategy
+Aim:
+To allocate 16 GB RAM efficiently for the host operating system and 5 virtual machines.
+1. Total RAM
+Total available RAM = 16 GB
+Host operating system requires = 4 GB
+RAM available for virtual machines = 16 GB − 4 GB = 12 GB
+2. VM Memory Requirement
+Number of virtual machines = 5
+Minimum RAM required for each VM = 2 GB
+Total RAM required = 5 × 2 GB = 10 GB
+3. Resource Allocation
+Allocate 4 GB to the Host OS.
+Allocate 2 GB to VM 1.
+Allocate 2 GB to VM 2.
+Allocate 2 GB to VM 3.
+Allocate 2 GB to VM 4.
+Allocate 2 GB to VM 5.
+Remaining RAM = 2 GB.
+4. Virtualization Strategy
+Use a hypervisor to manage the 5 virtual machines.
+Allocate the minimum required RAM to each VM.
+Keep the remaining 2 GB as reserve memory.
+Use dynamic memory allocation if supported by the hypervisor.
+Monitor VM memory usage and adjust resources when necessary.
+Result:
+The Host OS uses 4 GB, and the 5 VMs use 10 GB. The remaining 2 GB RAM is kept as reserve. Therefore, all 5 virtual machines can run smoothly within the 16 GB memory limit.
+
+
+
