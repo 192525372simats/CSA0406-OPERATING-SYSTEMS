@@ -1,0 +1,94 @@
+C.Chaithanya priya (192525372)
+                                     QUESTION 1
+PSEUDOCODE:
+BEGIN
+SET threshold = 80%
+usage = GET_DISK_USAGE()
+IF usage > threshold THEN
+DISPLAY "Disk usage exceeds 80%"
+IDENTIFY all log_files
+SORT log_files BY size DESCENDING
+FOR each file IN log_files DO
+IF file is old THEN
+DELETE file
+ELSE
+COMPRESS or ROTATE file
+ENDIF
+usage = GET_DISK_USAGE()
+IF usage <= threshold THEN
+BREAK
+ENDIF
+ENDFOR
+ELSE
+DISPLAY "Disk usage is within safe limit"
+ENDIF
+END
+                                                 QUESTION 2
+PSEUDOCODE:
+BEGIN
+INPUT process_list
+SORT process_list BY priority (highest first)
+WHILE process_list is NOT EMPTY DO
+SELECT process WITH highest priority
+ALLOCATE CPU time
+EXECUTE process
+IF process is completed THEN
+REMOVE process from process_list
+ELSE
+REDUCE priority slightly
+ADD process back to process_list
+ENDIF
+SORT process_list BY priority (highest first)
+ENDWHILE
+END
+                                                      QUESTION 3
+BEGIN
+total_RAM = 16 GB
+host_reserved = 4 GB
+available_RAM = total_RAM - host_reserved
+INPUT number_of_VMs
+min_RAM = 2 GB
+FOR i = 1 TO number_of_VMs DO
+IF available_RAM >= min_RAM THEN
+ALLOCATE min_RAM RAM to VM[i]
+available_RAM = available_RAM - min_RAM
+PRINT "2 GB allocated to VM[i]"
+ELSE
+PRINT "Insufficient memory for VM[i]
+ENDIF
+ENDFOR
+PRINT "Remaining RAM =", available_RAM
+END
+                                                          QUESTION 4
+PSUDOCODE:
+BEGIN
+INPUT performance_required
+INPUT budget
+INPUT hardware_access
+IF performance_required = HIGH AND hardware_access = TRUE THEN
+SELECT Type_1_Hypervisor
+ELSE IF budget = LOW THEN
+SELECT Type_2_Hypervisor
+ELSE
+SELECT Type_1_Hypervisor
+ENDIF
+PRINT "Selected Hypervisor =", selected_hypervisor
+END
+                                                         QUESTION 5
+PESUDOCODE:
+BEGIN
+INPUT application_list
+FOR each app IN application_list DO
+CREATE resource_group (cgroup) for app
+SET CPU limit for app
+SET memory limit for app
+ASSIGN app process to resource_group
+MONITOR CPU and memory usage
+IF CPU or memory usage exceeds the limit THEN
+THROTTLE resource usage
+ENDIF
+ENDFOR
+PRINT "CPU and memory resources are managed successfully"
+END
+
+
