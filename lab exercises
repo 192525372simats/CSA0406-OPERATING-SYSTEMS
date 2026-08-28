@@ -1,4 +1,4 @@
-                             exercise 1
+                                    exercise 1
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -13,24 +13,22 @@ printf("Child PID  : %d\n", getpid());
 printf("Parent PID : %d\n", getppid());
 }
 else if (pid > 0)
-    {
-  printf("Parent Process\n");
-  printf("Parent PID : %d\n", getpid());
-  printf("Parent's Parent PID : %d\n", getppid());
-    }
-    else
-    {
-        printf("Process creation failed.\n");
-    }
-
-    return 0;
+{
+printf("Parent Process\n");
+printf("Parent PID : %d\n", getpid());
+printf("Parent's Parent PID : %d\n", getppid());
+}
+else
+{
+printf("Process creation failed.\n");
+}
+return 0;
 }
 output 
 Parent Process 
 Parent PID : 23069
 Parent's Parent PID : 23062
-
- Child Process 
+Child Process 
 Child PID  : 23070
 Parent PID : 23069
                       exercise 2
@@ -38,16 +36,16 @@ Parent PID : 23069
 #include <fcntl.h>
 #include <unistd.h>
 int main() {
-  int src, dest, n;
-  char buf[100];
-    src = open("source.txt", O_RDONLY);
-    dest = open("dest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    while ((n = read(src, buf, sizeof(buf))) > 0)
-        write(dest, buf, n);
-    close(src);
-    close(dest);
-    printf("File copied successfully.\n");
-    return 0;
+int src, dest, n;
+char buf[100];
+src = open("source.txt", O_RDONLY);
+dest = open("dest.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+while ((n = read(src, buf, sizeof(buf))) > 0)
+write(dest, buf, n);
+close(src);
+close(dest);
+printf("File copied successfully.\n");
+return 0;
 }
 output 
 File copied successfully.
@@ -70,7 +68,7 @@ File copied successfully.
   for(i=0;i<n;i++)
   printf("P%d\t%d\t%d\t%d\n",i+1,bt[i],wt[i],tat[i]);
   return 0;
-}
+  }
 output:
 Enter number of processes: 3
 Enter Burst Time of P1: 5
@@ -1064,5 +1062,53 @@ Enter number of pages: 7
 Enter reference string: 1 2 3 4 1 2 5
 Enter number of frames: 3
 Total Page Faults = 5
+                                    exercise 34 
+#include <stdio.h>
+int main()
+{
+int n, start, i, record:
+printf("Enter number of records: ");
+scanf("%d", &n);
+printf("Enter starting block number: ");
+scanf("%d", &start);
+printf("\nFile Allocation:\n");
+for(i = 0; i < n; i++)
+{
+printf("Record %d -> Block %d\n", i + 1, start + i);
+}
+printf("\nEnter record number to access: ");
+scanf("%d", &record);
+if(record < 1 || record > n)
+{
+printf("Invalid record number");
+}
+else
+{
+printf("\nAccessing Record %d:\n", record);
+for(i = 1; i <= record; i++)
+{
+printf("Reading Record %d\n", i);
+}
+printf("\nRecord %d accessed successfully.\n", record);
+}
+return 0;
+}
+OUTPUT:
+Enter number of records: 5
+Enter starting block number: 10
+
+File Allocation:
+Record 1 -> Block 10
+Record 2 -> Block 11
+Record 3 -> Block 12
+Record 4 -> Block 13
+Record 5 -> Block 14
+Enter record number to access: 4
+Accessing Record 4:
+Reading Record 1
+Reading Record 2
+Reading Record 3
+Reading Record 4
+Record 4 accessed successfully.
 
 
